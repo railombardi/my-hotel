@@ -12,8 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
-import { getHotels } from '@/services/api'
+import { defineComponent } from 'vue'
 
 import HotelCard from '@/components/hotelCard/Index.vue'
 
@@ -33,23 +32,10 @@ export default defineComponent({
   components: {
     HotelCard
   },
-  setup() {
-    const hotels = ref<Hotel[]>([])
-
-    const fetchHotels = async () => {
-      try {
-        hotels.value = await getHotels()
-      } catch (error) {
-        console.error('Erro ao obter os hotéis:', error)
-      }
-    }
-
-    onMounted(() => {
-      fetchHotels()
-    })
-
-    return {
-      hotels
+  props: {
+    hotels: {
+      type: Array as PropType<Hotel>,
+      required: true
     }
   }
 })

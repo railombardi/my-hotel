@@ -1,18 +1,6 @@
 import fs from 'fs/promises'
 import axios from 'axios'
-
-const cities = [
-  'Porto Alegre',
-  'Gramado',
-  'Canela',
-  'Caxias do Sul',
-  'Torres',
-  'Pelotas',
-  'Santa Maria',
-  'Passo Fundo',
-  'Rio Grande',
-  'Novo Hamburgo'
-]
+import { cities } from '@/helpers/cities.ts'
 
 const hotelNames = [
   'Hotel Estrela',
@@ -43,7 +31,7 @@ const generateHotels = async (num) => {
         guests: getRandomInt(1, 5),
         rate: getRandomInt(1, 5),
         price: getRandomInt(100, 300),
-        city: cities[getRandomInt(0, cities.length - 1)],
+        city: i <= cities.length ? cities[i - 1] : cities[getRandomInt(0, cities.length - 1)],
         img: response.request.res.responseUrl
       })
     } catch (error) {

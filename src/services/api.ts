@@ -7,9 +7,9 @@ const apiClient = axios.create({
   }
 })
 
-export const getHotels = async () => {
+export const getHotels = async (city: any) => {
   try {
-    const response = await apiClient.get('/hotels')
+    const response = await apiClient.get(`/hotels?city=${city ? city : ''}`)
     return response.data
   } catch (error) {
     console.error('Erro ao obter os hotéis:', error)

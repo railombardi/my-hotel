@@ -1,6 +1,13 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<template>
+  <main>
+    <HotelSearchForm @submit="handleSubmit" />
+    <HotelList v-if="filteredHotels.length > 0" :hotels="filteredHotels" />
+  </main>
+</template>
 
+<script lang="ts">
+import { defineComponent, ref, computed } from 'vue'
+import { useHotelStore } from '@/stores/hotel'
 import HotelSearchForm from '../components/hotelSearchForm/Index.vue'
 import HotelList from '../components/hotelList/Index.vue'
 
@@ -9,16 +16,21 @@ export default defineComponent({
   components: {
     HotelSearchForm,
     HotelList
+  },
+  setup() {
+    const hotelStore = useHotelStore()
+
+    const handleSubmit = async (form) => {
+      await hotelStore.setSearch(form)
+    }
+
+    return {
+      handleSubmit,
+      filteredHotels: computed(() => hotelStore.filteredHotels)
+    }
   }
 })
 </script>
-
-<template>
-  <main>
-    <HotelSearchForm />
-    <HotelList />
-  </main>
-</template>
 
 <style scoped lang="scss">
 main {

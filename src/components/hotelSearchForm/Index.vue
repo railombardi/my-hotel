@@ -3,7 +3,7 @@
     <v-form @submit.prevent="submitForm">
       <v-row>
         <v-col cols="12" md="6">
-          <v-text-field v-model="form.destination" label="Destino" required></v-text-field>
+          <v-select v-model="form.city" label="Destino" :items="cities" clearable></v-select>
         </v-col>
         <v-col cols="12" md="6">
           <v-menu v-model="checkInMenu" transition="scale-transition" offset-y min-width="290px">
@@ -11,6 +11,7 @@
               <v-text-field
                 v-model="formattedCheckIn"
                 label="Data de Check-in"
+                :rules="[rules.required]"
                 readonly
                 v-bind="attrs"
                 v-on="{ ...on }"
@@ -30,6 +31,7 @@
               <v-text-field
                 v-model="formattedCheckOut"
                 label="Data de Check-out"
+                :rules="[rules.required]"
                 readonly
                 v-bind="attrs"
                 v-on="{ ...on }"
@@ -39,7 +41,7 @@
             <v-date-picker
               v-model="form.checkOut"
               @input="updateCheckOutDate"
-              :min="form.checkIn"
+              :min="form.checkIn || new Date()"
             ></v-date-picker>
           </v-menu>
         </v-col>
@@ -49,7 +51,7 @@
             label="Número de Quartos"
             type="number"
             min="1"
-            required
+            readonly
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -71,20 +73,25 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
+import { cities } from '@/helpers/cities.ts'
 
 export default defineComponent({
   name: 'HotelSearchForm',
-  setup() {
+  emits: ['submit'],
+  setup(props, { emit }) {
     const form = ref({
-      destination: '',
-      checkIn: null,
-      checkOut: null,
+      city: '',
+      checkIn: null as Date | null,
+      checkOut: null as Date | null,
       rooms: 1,
       guests: 1
     })
-
     const checkInMenu = ref(false)
     const checkOutMenu = ref(false)
+    const validatedForm = ref(true)
+    const rules = ref({
+      required: (value) => !!value || 'Campo obrigatório*'
+    })
 
     const formattedCheckIn = computed({
       get() {
@@ -104,6 +111,10 @@ export default defineComponent({
       }
     })
 
+    const validateForm = computed(() => {
+      return form.value.checkIn && form.value.checkOut
+    })
+
     const updateCheckInDate = (date: Date) => {
       form.value.checkIn = date
       checkInMenu.value = false
@@ -115,7 +126,10 @@ export default defineComponent({
     }
 
     const submitForm = () => {
-      console.log('Form submitted:', form.value)
+      validatedForm.value = validateForm.value
+      if (validatedForm.value) {
+        emit('submit', form.value)
+      }
     }
 
     return {
@@ -124,9 +138,12 @@ export default defineComponent({
       checkOutMenu,
       formattedCheckIn,
       formattedCheckOut,
+      validateForm,
+      rules,
       updateCheckInDate,
       updateCheckOutDate,
-      submitForm
+      submitForm,
+      cities
     }
   }
 })
