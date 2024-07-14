@@ -1,68 +1,5 @@
-<script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
-
-export default defineComponent({
-  name: 'HotelSearchForm',
-  setup() {
-    const form = ref({
-      destination: '',
-      checkIn: null,
-      checkOut: null,
-      rooms: 1,
-      guests: 1
-    })
-
-    const checkInMenu = ref(false)
-    const checkOutMenu = ref(false)
-
-    const formattedCheckIn = computed({
-      get() {
-        return form.value.checkIn ? form.value.checkIn.toLocaleDateString() : ''
-      },
-      set(value) {
-        form.value.checkIn = parse(value, 'dd/MM/yyyy', new Date())
-      }
-    })
-
-    const formattedCheckOut = computed({
-      get() {
-        return form.value.checkOut ? form.value.checkOut.toLocaleDateString() : ''
-      },
-      set(value) {
-        form.value.checkOut = parse(value, 'dd/MM/yyyy', new Date())
-      }
-    })
-
-    const updateCheckInDate = (date: Date) => {
-      form.value.checkIn = date
-      checkInMenu.value = false
-    }
-
-    const updateCheckOutDate = (date: Date) => {
-      form.value.checkOut = date
-      checkOutMenu.value = false
-    }
-
-    const submitForm = () => {
-      console.log('Form submitted:', form.value)
-    }
-
-    return {
-      form,
-      checkInMenu,
-      checkOutMenu,
-      formattedCheckIn,
-      formattedCheckOut,
-      updateCheckInDate,
-      updateCheckOutDate,
-      submitForm
-    }
-  }
-})
-</script>
-
 <template>
-  <v-container>
+  <v-container class="search-form">
     <v-form @submit.prevent="submitForm">
       <v-row>
         <v-col cols="12" md="6">
@@ -131,3 +68,66 @@ export default defineComponent({
     </v-form>
   </v-container>
 </template>
+
+<script lang="ts">
+import { defineComponent, ref, computed } from 'vue'
+
+export default defineComponent({
+  name: 'HotelSearchForm',
+  setup() {
+    const form = ref({
+      destination: '',
+      checkIn: null,
+      checkOut: null,
+      rooms: 1,
+      guests: 1
+    })
+
+    const checkInMenu = ref(false)
+    const checkOutMenu = ref(false)
+
+    const formattedCheckIn = computed({
+      get() {
+        return form.value.checkIn ? form.value.checkIn.toLocaleDateString() : ''
+      },
+      set(value) {
+        form.value.checkIn = parse(value, 'dd/MM/yyyy', new Date())
+      }
+    })
+
+    const formattedCheckOut = computed({
+      get() {
+        return form.value.checkOut ? form.value.checkOut.toLocaleDateString() : ''
+      },
+      set(value) {
+        form.value.checkOut = parse(value, 'dd/MM/yyyy', new Date())
+      }
+    })
+
+    const updateCheckInDate = (date: Date) => {
+      form.value.checkIn = date
+      checkInMenu.value = false
+    }
+
+    const updateCheckOutDate = (date: Date) => {
+      form.value.checkOut = date
+      checkOutMenu.value = false
+    }
+
+    const submitForm = () => {
+      console.log('Form submitted:', form.value)
+    }
+
+    return {
+      form,
+      checkInMenu,
+      checkOutMenu,
+      formattedCheckIn,
+      formattedCheckOut,
+      updateCheckInDate,
+      updateCheckOutDate,
+      submitForm
+    }
+  }
+})
+</script>
