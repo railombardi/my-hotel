@@ -27,8 +27,8 @@ const generateHotels = async (num) => {
       hotels.push({
         id: i,
         name: hotelNames[getRandomInt(0, hotelNames.length - 1)],
-        rooms: 1,
-        guests: getRandomInt(1, 5),
+        rooms: getRandomInt(1, 4),
+        guests: getRandomInt(1, 8),
         rate: getRandomInt(1, 5),
         price: getRandomInt(100, 300),
         city: i <= cities.length ? cities[i - 1] : cities[getRandomInt(0, cities.length - 1)],

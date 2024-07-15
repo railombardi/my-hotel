@@ -7,14 +7,13 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-menu v-model="checkInMenu" transition="scale-transition" offset-y min-width="290px">
-            <template #activator="{ on, attrs }">
+            <template #activator="{ props }">
               <v-text-field
                 v-model="formattedCheckIn"
                 label="Data de Check-in"
                 :rules="[rules.required]"
                 readonly
-                v-bind="attrs"
-                v-on="{ ...on }"
+                v-bind="props"
                 @click="checkInMenu = true"
               ></v-text-field>
             </template>
@@ -22,19 +21,19 @@
               v-model="form.checkIn"
               @input="updateCheckInDate"
               :min="new Date()"
+              :max="form.checkOut"
             ></v-date-picker>
           </v-menu>
         </v-col>
         <v-col cols="12" md="6">
           <v-menu v-model="checkOutMenu" transition="scale-transition" offset-y min-width="290px">
-            <template #activator="{ on, attrs }">
+            <template #activator="{ props }">
               <v-text-field
                 v-model="formattedCheckOut"
                 label="Data de Check-out"
                 :rules="[rules.required]"
                 readonly
-                v-bind="attrs"
-                v-on="{ ...on }"
+                v-bind="props"
                 @click="checkOutMenu = true"
               ></v-text-field>
             </template>
@@ -51,7 +50,7 @@
             label="Número de Quartos"
             type="number"
             min="1"
-            readonly
+            max="4"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -60,6 +59,7 @@
             label="Número de Hóspedes"
             type="number"
             min="1"
+            max="8"
             required
           ></v-text-field>
         </v-col>
@@ -73,7 +73,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
-import { cities } from '@/helpers/cities.ts'
+import { cities } from '@/helpers/cities'
 
 export default defineComponent({
   name: 'HotelSearchForm',
@@ -90,7 +90,7 @@ export default defineComponent({
     const checkOutMenu = ref(false)
     const validatedForm = ref(true)
     const rules = ref({
-      required: (value) => !!value || 'Campo obrigatório*'
+      required: (value: string) => !!value || 'Campo obrigatório*'
     })
 
     const formattedCheckIn = computed({
@@ -98,7 +98,7 @@ export default defineComponent({
         return form.value.checkIn ? form.value.checkIn.toLocaleDateString() : ''
       },
       set(value) {
-        form.value.checkIn = parse(value, 'dd/MM/yyyy', new Date())
+        form.value.checkIn = new Date(value)
       }
     })
 
@@ -107,12 +107,12 @@ export default defineComponent({
         return form.value.checkOut ? form.value.checkOut.toLocaleDateString() : ''
       },
       set(value) {
-        form.value.checkOut = parse(value, 'dd/MM/yyyy', new Date())
+        form.value.checkOut = new Date(value)
       }
     })
 
     const validateForm = computed(() => {
-      return form.value.checkIn && form.value.checkOut
+      return !!form.value.checkIn && !!form.value.checkOut
     })
 
     const updateCheckInDate = (date: Date) => {

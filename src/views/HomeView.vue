@@ -6,10 +6,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { useHotelStore } from '@/stores/hotel'
 import HotelSearchForm from '../components/hotelSearchForm/Index.vue'
 import HotelList from '../components/hotelList/Index.vue'
+
+interface SearchForm {
+  city: string
+  checkIn: Date | null
+  checkOut: Date | null
+  rooms: number
+  guests: number
+}
 
 export default defineComponent({
   name: 'HomeView',
@@ -20,7 +28,7 @@ export default defineComponent({
   setup() {
     const hotelStore = useHotelStore()
 
-    const handleSubmit = async (form) => {
+    const handleSubmit = async (form: SearchForm) => {
       await hotelStore.setSearch(form)
     }
 

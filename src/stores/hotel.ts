@@ -23,6 +23,7 @@ interface SearchState {
 interface State {
   hotels: Hotel[]
   search: SearchState
+  sortList: string
 }
 
 export const useHotelStore = defineStore({
@@ -35,7 +36,8 @@ export const useHotelStore = defineStore({
       checkOut: null,
       rooms: 1,
       guests: 1
-    }
+    },
+    sortList: 'rating'
   }),
   actions: {
     async fetchHotels() {
@@ -46,8 +48,11 @@ export const useHotelStore = defineStore({
       }
     },
     async setSearch(search: SearchState) {
-      this.search = search
+      this.search = { ...search }
       await this.fetchHotels()
+    },
+    setSortList(sortBy: string) {
+      this.sortList = sortBy
     },
     resetSearch() {
       this.search = {
@@ -61,12 +66,26 @@ export const useHotelStore = defineStore({
   },
   getters: {
     filteredHotels(state): Hotel[] {
-      return state.hotels.filter((hotel) => {
+      const filtered = state.hotels.filter((hotel) => {
         return (
           (state.search.rooms ? hotel.rooms >= state.search.rooms : true) &&
           (state.search.guests ? hotel.guests >= state.search.guests : true)
         )
       })
+
+      if (state.sortList === 'rating') {
+        filtered.sort((a, b) => b.rate - a.rate)
+      } else if (state.sortList === 'price-low-high') {
+        filtered.sort((a, b) => a.price - b.price)
+      } else if (state.sortList === 'price-high-low') {
+        filtered.sort((a, b) => b.price - a.price)
+      } else if (state.sortList === 'ascending-alphabetical') {
+        filtered.sort((a, b) => a.name.localeCompare(b.name))
+      } else if (state.sortList === 'descending-alphabetical') {
+        filtered.sort((a, b) => b.name.localeCompare(a.name))
+      }
+
+      return filtered
     }
   }
 })
