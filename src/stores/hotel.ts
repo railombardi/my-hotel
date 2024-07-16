@@ -13,7 +13,7 @@ interface Hotel {
 }
 
 interface SearchState {
-  city: string
+  city?: string
   checkIn: Date | null
   checkOut: Date | null
   rooms: number

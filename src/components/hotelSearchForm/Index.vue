@@ -72,14 +72,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
-import { cities } from '@/helpers/cities'
+import { defineComponent, ref, computed, onMounted } from 'vue'
+import { cities } from '@/helpers/mockCities.js'
+import type { PropType } from 'vue'
+
+interface SearchForm {
+  city?: string
+  checkIn: Date | null
+  checkOut: Date | null
+  rooms: number
+  guests: number
+}
 
 export default defineComponent({
   name: 'HotelSearchForm',
   emits: ['submit'],
+  props: {
+    search: {
+      type: Object as PropType<SearchForm | null>,
+      default: () => {}
+    }
+  },
   setup(props, { emit }) {
-    const form = ref({
+    const form = ref<SearchForm>({
       city: '',
       checkIn: null as Date | null,
       checkOut: null as Date | null,
@@ -113,6 +128,12 @@ export default defineComponent({
 
     const validateForm = computed(() => {
       return !!form.value.checkIn && !!form.value.checkOut
+    })
+
+    onMounted(() => {
+      if (props.search) {
+        form.value = { ...props.search }
+      }
     })
 
     const updateCheckInDate = (date: Date) => {

@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
 import axios from 'axios'
-import { cities } from '@/helpers/cities.ts'
+import { cities } from './src/helpers/mockCities.js'
 
 const hotelNames = [
   'Hotel Estrela',
@@ -45,7 +45,7 @@ const generateAndSaveHotels = async (num) => {
   try {
     console.log('Gerando hotéis aleatórios...')
     const hotels = await generateHotels(num)
-    const db = { hotels }
+    const db = { hotels, reservations: [] }
     await fs.writeFile('db.json', JSON.stringify(db, null, 2))
     console.log('db.json criado com sucesso!')
   } catch (error) {

@@ -28,6 +28,9 @@
         {{ hotel.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}/noite
       </strong>
     </v-card-text>
+    <v-card-actions v-if="!isComparisonMode" class="d-flex justify-center">
+      <v-btn variant="flat" color="#00bd7e" @click="handleClick"> Reservar </v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 <script lang="ts">
@@ -66,12 +69,14 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['select', 'unselect'],
+  emits: ['select', 'unselect', 'redirectToReservation'],
   setup(props, { emit }) {
     const handleClick = () => {
       if (props.isComparisonMode) {
         return props.selected ? emit('unselect') : emit('select')
       }
+
+      emit('redirectToReservation')
     }
 
     return {

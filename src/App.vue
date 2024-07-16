@@ -4,7 +4,7 @@ import { RouterView } from 'vue-router'
 
 <template>
   <header>
-    <span> MeuHotel.com </span>
+    <strong> MeuHotel.com </strong>
   </header>
 
   <RouterView />
@@ -14,7 +14,7 @@ import { RouterView } from 'vue-router'
 header {
   border-bottom: 1px solid $primaryGreen;
 
-  span {
+  strong {
     font-size: 20px;
     color: $primaryGreen;
   }

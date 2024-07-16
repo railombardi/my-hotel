@@ -31,6 +31,7 @@
           :selected="hotelWasSelected(hotel)"
           @select="selectHotel(hotel)"
           @unselect="unselectHotel(hotel)"
+          @redirect-to-reservation="handleRedirect(hotel.id)"
         />
       </v-col>
     </v-row>
@@ -41,6 +42,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
 import type { PropType } from 'vue'
+import { useHotelStore } from '@/stores/hotel'
 
 import HotelCard from '@/components/hotelCard/Index.vue'
 import SortSelector from '@/components/sortSelector/Index.vue'
@@ -71,6 +73,8 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const hotelStore = useHotelStore()
+
     const isComparisonMode = ref(false)
     const confirmedComparison = ref(false)
     const selectedForComparison = ref<Hotel[]>([])
@@ -135,6 +139,15 @@ export default defineComponent({
       selectedForComparison.value.splice(index, 1)
     }
 
+    const handleRedirect = (id: number) => {
+      const checkIn = hotelStore.search.checkIn
+      const checkOut = hotelStore.search.checkOut
+
+      if (checkIn && checkOut) {
+        window.location.href = `/hotel/${id}?checkIn=${checkIn.toLocaleDateString()}&checkOut=${checkOut.toLocaleDateString()}`
+      }
+    }
+
     return {
       isComparisonMode,
       confirmedComparison,
@@ -147,7 +160,8 @@ export default defineComponent({
       handleSelectAll,
       hotelWasSelected,
       selectHotel,
-      unselectHotel
+      unselectHotel,
+      handleRedirect
     }
   }
 })
