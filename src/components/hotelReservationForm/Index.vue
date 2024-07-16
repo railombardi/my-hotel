@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="reservation-form">
     <v-row>
       <v-col cols="12" md="4">
         <v-card>
@@ -109,6 +109,8 @@
 import { defineComponent, ref, computed } from 'vue'
 import type { PropType } from 'vue'
 import { useReservationStore } from '@/stores/reservation'
+import { useNotificationStore } from '@/stores/notification'
+import { useRouter } from 'vue-router'
 
 interface PaymentDetails {
   cardNumber: string
@@ -144,6 +146,8 @@ export default defineComponent({
   },
   setup(props) {
     const reservationStore = useReservationStore()
+    const notificationStore = useNotificationStore()
+    const router = useRouter()
 
     const formData = ref<FormData>({
       firstName: '',
@@ -160,7 +164,6 @@ export default defineComponent({
     })
 
     const countries = ['Brasil', 'Argentina', 'Chile', 'Uruguai', 'Paraguai']
-
     const reservationForm = ref(null)
 
     const isValidForm = computed(() => {
@@ -182,10 +185,19 @@ export default defineComponent({
         ...formData.value,
         hotelId: props.hotel.id
       }
-      reservationStore.addReservation(reservation).then(() => {
-        alert('Reserva realizada com sucesso!')
-        window.location.href = '/'
-      })
+      reservationStore
+        .addReservation(reservation)
+        .then(async () => {
+          notificationStore.setNotificationMessage('Reserva realizada com sucesso!')
+          notificationStore.setNotificationColor('success')
+          await router.push({
+            path: '/hotels'
+          })
+        })
+        .catch(() => {
+          notificationStore.setNotificationMessage('Falha ao realizar a reserva. Tente novamente.')
+          notificationStore.setNotificationColor('error')
+        })
     }
 
     return {
@@ -198,3 +210,8 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss" scoped>
+.reservation-form {
+  position: relative;
+}
+</style>

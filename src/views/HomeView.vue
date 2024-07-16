@@ -2,6 +2,11 @@
   <main>
     <HotelSearchForm @submit="handleSubmit" :search="search" />
     <RouterView v-if="filteredHotels.length > 0" :hotels="filteredHotels" />
+    <Notification
+      v-if="notificationStore.notificationMessage"
+      :message="notificationStore.notificationMessage"
+      :color="notificationStore.notificationColor"
+    />
   </main>
 </template>
 
@@ -9,8 +14,11 @@
 import { defineComponent, computed, onMounted } from 'vue'
 import type { ComputedRef } from 'vue'
 import { useHotelStore } from '@/stores/hotel'
-import HotelSearchForm from '../components/hotelSearchForm/Index.vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useNotificationStore } from '@/stores/notification'
+
+import HotelSearchForm from '../components/hotelSearchForm/Index.vue'
+import Notification from '@/components/notification/Index.vue'
 
 interface SearchForm {
   city?: string
@@ -23,10 +31,12 @@ interface SearchForm {
 export default defineComponent({
   name: 'HomeView',
   components: {
-    HotelSearchForm
+    HotelSearchForm,
+    Notification
   },
   setup() {
     const hotelStore = useHotelStore()
+    const notificationStore = useNotificationStore()
     const route = useRoute()
     const router = useRouter()
 
@@ -97,7 +107,8 @@ export default defineComponent({
     return {
       handleSubmit,
       filteredHotels: computed(() => hotelStore.filteredHotels),
-      search
+      search,
+      notificationStore
     }
   }
 })
@@ -105,6 +116,6 @@ export default defineComponent({
 
 <style scoped lang="scss">
 main {
-  margin-top: 80px;
+  margin-top: 40px;
 }
 </style>

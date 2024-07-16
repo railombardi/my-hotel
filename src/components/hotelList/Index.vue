@@ -11,6 +11,9 @@
       <v-btn v-if="!confirmedComparison" color="#00bd7e" @click="handleCompare">
         {{ compareText }}
       </v-btn>
+      <span v-if="isComparisonMode && comparisonBlock && !confirmedComparison">
+        Selecione ao menos 2 hotéis para comparar
+      </span>
       <v-btn
         v-if="isComparisonMode && !confirmedComparison"
         color="#00bd7e"
@@ -79,6 +82,7 @@ export default defineComponent({
     const confirmedComparison = ref(false)
     const selectedForComparison = ref<Hotel[]>([])
     const selectAll = ref(false)
+    const comparisonBlock = ref(false)
 
     const comparisonTitle = computed(() => {
       if (confirmedComparison.value) {
@@ -102,6 +106,10 @@ export default defineComponent({
       if (!isComparisonMode.value) {
         isComparisonMode.value = true
       } else {
+        if (selectedForComparison.value.length <= 1) {
+          comparisonBlock.value = true
+          return
+        }
         confirmedComparison.value = true
       }
     }
@@ -111,6 +119,7 @@ export default defineComponent({
       confirmedComparison.value = false
       selectAll.value = false
       selectedForComparison.value = []
+      comparisonBlock.value = false
     }
 
     const handleSelectAll = () => {
@@ -153,6 +162,7 @@ export default defineComponent({
       confirmedComparison,
       selectedForComparison,
       selectAll,
+      comparisonBlock,
       comparisonTitle,
       compareText,
       handleCompare,

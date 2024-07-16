@@ -51,6 +51,7 @@
             type="number"
             min="1"
             max="4"
+            @input="roomsChangeMaxValue"
           ></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
@@ -61,6 +62,7 @@
             min="1"
             max="8"
             required
+            @input="guestsChangeMaxValue"
           ></v-text-field>
         </v-col>
         <v-col class="d-flex justify-center" cols="12" md="6" align-self="start">
@@ -153,6 +155,18 @@ export default defineComponent({
       }
     }
 
+    const roomsChangeMaxValue = () => {
+      if (form.value.rooms > 4) {
+        form.value.rooms = 4
+      }
+    }
+
+    const guestsChangeMaxValue = () => {
+      if (form.value.guests > 8) {
+        form.value.guests = 8
+      }
+    }
+
     return {
       form,
       checkInMenu,
@@ -164,7 +178,9 @@ export default defineComponent({
       updateCheckInDate,
       updateCheckOutDate,
       submitForm,
-      cities
+      cities,
+      roomsChangeMaxValue,
+      guestsChangeMaxValue
     }
   }
 })
