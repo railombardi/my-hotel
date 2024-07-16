@@ -1,45 +1,95 @@
-# my-hotel
+# MyHotel
 
-This template should help get you started developing with Vue 3 in Vite.
+Este é um sistema de reserva de hotéis desenvolvido com Vue.js, utilizando TypeScript, Vue Router, Pinia para gerenciamento de estado, Vuetify para os componentes de interface e json-server para simulação de API.
 
-## Recommended IDE Setup
+## Funcionalidades
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+1. **Pesquisa de Hotéis**
 
-## Type Support for `.vue` Imports in TS
+   - Permite ao usuário inserir critérios como destino, datas de check-in e check-out, número de quartos e número de hóspedes.
+   - Exibe resultados da pesquisa ordenáveis por preço, avaliações e outros critérios.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+2. **Comparação de Opções**
 
-## Customize configuration
+   - Permite seleção múltipla de hotéis para comparar características lado a lado.
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+3. **Reserva de Quartos**
 
-## Project Setup
+   - Formulário para reserva de quarto em um hotel selecionado, solicitando nome do usuário, contato e detalhes de pagamento.
 
-```sh
+4. **Notificações**
+   - Mecanismo de notificação para informar ao usuário sobre o status da reserva.
+
+## Tecnologias Utilizadas
+
+- **Vue.js** - Framework JavaScript progressivo para construção de interfaces de usuário.
+- **TypeScript** - Superset JavaScript para desenvolvimento mais escalável.
+- **Vue Router** - Gerenciamento de rotas para navegação na aplicação.
+- **Pinia** - Estado global com reatividade e tipagem forte.
+- **Vuetify** - Biblioteca de componentes Vue para uma interface de usuário rica e responsiva.
+- **Mock Service APIs** - Simulação de chamadas de API para busca e reserva de hotéis.
+- **Lazy Loading e Code Splitting** - Otimização de desempenho carregando componentes sob demanda.
+- **GitHub Actions** - Pipeline básico de CI/CD configurado para automação de builds e testes.
+
+## Instalação e Uso
+
+### Pré-requisitos
+
+- Node.js e npm instalados globalmente.
+
+### Instalação
+
+1. Clone o repositório do projeto:
+
+```
+git clone https://github.com/railombardi/my-hotel
+```
+
+2. Instale as dependências:
+
+```
+cd my-hotel
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+3. Rode o script para alimentar a api simulada:
 
-```sh
+```
+node --experimental-modules generateHotels.mjs
+```
+
+### Execução
+
+Para iniciar o servidor de desenvolvimento:
+
+```
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+Para rodar a api simulada json-server:
 
-```sh
+```
+json-server --watch db.json
+```
+
+Acesse a aplicação em `http://localhost:5173` (ou outra porta especificada no console).
+
+### Build para Produção
+
+Para compilar e minificar os arquivos para produção:
+
+```
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### Testes
 
-```sh
+Para executar os testes unitários:
+
+```
 npm run test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### Licença
 
-```sh
-npm run lint
-```
+Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
